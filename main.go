@@ -27,6 +27,7 @@ func NewOpenStackExporter(provider *gophercloud.ProviderClient) *OpenStackExport
     return &OpenStackExporter{
         collectors: []prometheus.Collector{
             collectors.NewComputeCollector(*provider),
+            collectors.NewBlockStorageCollector(*provider),
         },
     }
 }
