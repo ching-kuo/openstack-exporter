@@ -68,7 +68,7 @@ func main(){
 
     provider, err := openstack.AuthenticatedClient(opts)
 
-    if err != nil { // Handle errors reading the config file
+    if err != nil {
 	    panic(fmt.Errorf("Fatal error autenticating: %s \n", err))
     }
 
