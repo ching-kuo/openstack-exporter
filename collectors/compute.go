@@ -3,7 +3,7 @@ package collectors
 import (
     "log"
 
-	"github.com/prometheus/client_golang/prometheus"
+    "github.com/prometheus/client_golang/prometheus"
     "github.com/gophercloud/gophercloud"
     "github.com/gophercloud/gophercloud/openstack"
     "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/hypervisors"
