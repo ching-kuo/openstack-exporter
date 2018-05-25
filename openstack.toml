@@ -1,0 +1,4 @@
+[global]
+username = "OPENSTACK_USERNAME"
+password = "OPENSTACK_PASSWORD"
+endpoint = "OPENSTACK_ENDPOINT"
