@@ -5,9 +5,9 @@ import (
     "net/http"
     "log"
     "sync"
-    "./collectors"
 
-	"github.com/prometheus/client_golang/prometheus"
+    "github.com/iGene/openstack-exporter/collectors"
+    "github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
     "github.com/gophercloud/gophercloud"
     "github.com/gophercloud/gophercloud/openstack"
