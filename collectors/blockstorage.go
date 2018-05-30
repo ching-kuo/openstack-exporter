@@ -9,6 +9,8 @@ import (
     "github.com/gophercloud/gophercloud/openstack/blockstorage/v3/volumes"
 )
 
+// blockStorageCollector collects statistics about Cinder in an OpenStack Cluster.
+
 type blockStorageCollector struct{
     provider gophercloud.ProviderClient
 
@@ -16,6 +18,8 @@ type blockStorageCollector struct{
 
     TotalVolumeNumber prometheus.Gauge
 }
+
+// NewBlockStorageCollector creates an instance of blockStorageCollector.
 
 func NewBlockStorageCollector(provider gophercloud.ProviderClient) *blockStorageCollector{
     return &blockStorageCollector{
@@ -78,11 +82,17 @@ func (b *blockStorageCollector) collect() error{
     return nil
 }
 
+// Describe sends the super-set of all possible descriptors of metrics
+// collected by blockStorageCollector.
+
 func (b *blockStorageCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range b.collectorList() {
 		metric.Describe(ch)
 	}
 }
+
+// Collect is called by the Prometheus registry when collecting
+// metrics.
 
 func (b *blockStorageCollector) Collect(ch chan<- prometheus.Metric) {
 

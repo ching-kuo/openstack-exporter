@@ -9,6 +9,9 @@ import (
     "github.com/gophercloud/gophercloud/openstack/compute/v2/extensions/hypervisors"
 )
 
+// computeCollector collects statistics about hypervisor and Nova in an OpenStack
+// cluster.
+
 type computeCollector struct{
     provider gophercloud.ProviderClient
 
@@ -18,6 +21,8 @@ type computeCollector struct{
 
     TotalVCPUsUsed prometheus.Gauge
 }
+
+// NewComputeCollector creates an instance of computeCollector.
 
 func NewComputeCollector(provider gophercloud.ProviderClient) *computeCollector{
     return &computeCollector{
@@ -87,11 +92,17 @@ func (c *computeCollector) collect() error{
     return nil
 }
 
+// Describe sends the super-set of all possible descriptors of metrics
+// collected by computeCollector.
+
 func (c *computeCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range c.collectorList() {
 		metric.Describe(ch)
 	}
 }
+
+// Collect is called by the Prometheus registry when collecting
+// metrics.
 
 func (c *computeCollector) Collect(ch chan<- prometheus.Metric) {
 

@@ -10,6 +10,8 @@ import (
     "github.com/gophercloud/gophercloud/openstack/networking/v2/networks"
 )
 
+// networkCollector collects statistic about Neturon in an OpenStack Clusetr.
+
 type networkCollector struct{
     provider gophercloud.ProviderClient
 
@@ -17,6 +19,8 @@ type networkCollector struct{
 
     TotalNetworkNumber prometheus.Gauge
 }
+
+// GetNetworkNumber return the number of all network provisioned.
 
 func GetNetworkNumber(networkClient *gophercloud.ServiceClient) (int, error){
 
@@ -35,6 +39,8 @@ func GetNetworkNumber(networkClient *gophercloud.ServiceClient) (int, error){
     return len(allNetworks), nil
 }
 
+// GetIPsNumber returns the number of all floating IPs used.
+
 func GetIPsNumber(networkClient *gophercloud.ServiceClient) (int, error){
 
     opts := floatingips.ListOpts{}
@@ -51,6 +57,8 @@ func GetIPsNumber(networkClient *gophercloud.ServiceClient) (int, error){
 
     return len(allFIPs), nil
 }
+
+// NewNetworkCollector create an instance of networkCollector.
 
 func NewNetworkCollector(provider gophercloud.ProviderClient) *networkCollector{
     return &networkCollector{
@@ -100,11 +108,17 @@ func (n *networkCollector) collect() error{
     return nil
 }
 
+// Describe sends the super-set of all possible descriptors of metrics
+// collected by networkCollector.
+
 func (n *networkCollector) Describe(ch chan<- *prometheus.Desc) {
 	for _, metric := range n.collectorList() {
 		metric.Describe(ch)
 	}
 }
+
+// Collect is called by the Prometheus registry when collecting
+// metrics.
 
 func (n *networkCollector) Collect(ch chan<- prometheus.Metric) {
 

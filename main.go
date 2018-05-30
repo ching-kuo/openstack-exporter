@@ -14,6 +14,9 @@ import (
     "github.com/spf13/viper"
 )
 
+// Wraps all collectors in a single exporter to extract metrics and make sure it is
+// thread safe.
+
 type OpenStackExporter struct {
 
     mu         sync.Mutex
@@ -21,7 +24,12 @@ type OpenStackExporter struct {
 
 }
 
+// verify that the exporter implementation is correct
+
 var _ prometheus.Collector = &OpenStackExporter{}
+
+// NewOpenStackExporter creates an instance to OpenStackExporter and returns a 
+// reference to it.
 
 func NewOpenStackExporter(provider *gophercloud.ProviderClient) *OpenStackExporter {
     return &OpenStackExporter{
@@ -33,6 +41,9 @@ func NewOpenStackExporter(provider *gophercloud.ProviderClient) *OpenStackExport
     }
 }
 
+// Collect is called by the Prometheus registry when collecting
+// metrics.
+
 func (o *OpenStackExporter) Collect(ch chan<- prometheus.Metric) {
 	o.mu.Lock()
 	defer o.mu.Unlock()
@@ -41,6 +52,10 @@ func (o *OpenStackExporter) Collect(ch chan<- prometheus.Metric) {
 		oo.Collect(ch)
 	}
 }
+
+// Describe sends the super-set of all possible descriptors of metrics
+// collected by this Collector to the provided channel and returns once
+// the last descriptor has been sent.
 
 func (o *OpenStackExporter) Describe(ch chan<- *prometheus.Desc) {
 	for _, oo := range o.collectors {
