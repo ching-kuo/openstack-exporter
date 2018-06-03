@@ -66,7 +66,7 @@ func (o *OpenStackExporter) Describe(ch chan<- *prometheus.Desc) {
 func main(){
 
     viper.SetConfigName("openstack")
-    viper.AddConfigPath(".")
+    viper.AddConfigPath("/etc/openstack-exporter/")
     err := viper.ReadInConfig()
     viper.SetConfigType("toml")
     if err != nil { // Handle errors reading the config file
