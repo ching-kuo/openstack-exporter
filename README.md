@@ -17,6 +17,7 @@ Copy the sample configuraion file and fill in
 - OpenStack Username
 - OpenStack Password
 - OpenStack Keystone Endpoint
+- OpenStack Project Name
 
 Launch the exporter using Docker
 

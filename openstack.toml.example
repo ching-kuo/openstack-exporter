@@ -2,3 +2,4 @@
 username = "OPENSTACK_USERNAME"
 password = "OPENSTACK_PASSWORD"
 endpoint = "OPENSTACK_ENDPOINT"
+project_name = "OPENSTACK_PROJECT_NAME"

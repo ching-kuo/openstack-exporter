@@ -75,12 +75,14 @@ func main(){
     endpoint := viper.GetString("global.endpoint")
     username := viper.GetString("global.username")
     password := viper.GetString("global.password")
+    project_name := viper.GetString("global.project_name")
 
     opts := gophercloud.AuthOptions{
         IdentityEndpoint: endpoint,
         Username: username,
         Password: password,
         DomainName: "default",
+        TenantName: project_name,
     }
 
     provider, err := openstack.AuthenticatedClient(opts)
