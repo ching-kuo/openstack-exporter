@@ -1,4 +1,4 @@
-# OpenStack-Exporter
+# OpenStack-Exporter [![Build Status](https://travis-ci.com/iGene/openstack-exporter.svg?branch=master)](https://travis-ci.com/iGene/openstack-exporter)
 Simple Prometheus exporter for OpenStack.
 
 ## Build
