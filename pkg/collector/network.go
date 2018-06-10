@@ -14,6 +14,8 @@ import (
 type networkCollector struct {
 	provider gophercloud.ProviderClient
 
+	region string
+
 	TotalFloatingIPsUsed prometheus.Gauge
 
 	TotalNetworkNumber prometheus.Gauge
@@ -56,17 +58,16 @@ func GetIPsNumber(networkClient *gophercloud.ServiceClient) (int, error) {
 }
 
 // NewNetworkCollector create an instance of networkCollector.
-func NewNetworkCollector(provider gophercloud.ProviderClient) *networkCollector {
+func NewNetworkCollector(provider gophercloud.ProviderClient, region string) *networkCollector {
 	return &networkCollector{
 		provider: provider,
-
+		region:   region,
 		TotalFloatingIPsUsed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_floating_ips_used",
 				Help: "Total number of floating IPs used",
 			},
 		),
-
 		TotalNetworkNumber: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_network_number",
@@ -84,7 +85,7 @@ func (n *networkCollector) collectorList() []prometheus.Collector {
 }
 
 func (n *networkCollector) collect() error {
-	region := gophercloud.EndpointOpts{Region: "RegionOne"}
+	region := gophercloud.EndpointOpts{Region: n.region}
 	networkClient, err := openstack.NewNetworkV2(&n.provider, region)
 	if err != nil {
 		return err

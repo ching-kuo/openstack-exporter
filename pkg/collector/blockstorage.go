@@ -13,23 +13,24 @@ import (
 type blockStorageCollector struct {
 	provider gophercloud.ProviderClient
 
+	region string
+
 	TotalVolumeSize prometheus.Gauge
 
 	TotalVolumeNumber prometheus.Gauge
 }
 
 // NewBlockStorageCollector creates an instance of blockStorageCollector.
-func NewBlockStorageCollector(provider gophercloud.ProviderClient) *blockStorageCollector {
+func NewBlockStorageCollector(provider gophercloud.ProviderClient, region string) *blockStorageCollector {
 	return &blockStorageCollector{
 		provider: provider,
-
+		region:   region,
 		TotalVolumeSize: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_volume_size",
 				Help: "Number of total size of volumes in GB",
 			},
 		),
-
 		TotalVolumeNumber: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_volume_number",
@@ -47,7 +48,7 @@ func (b *blockStorageCollector) collectorList() []prometheus.Collector {
 }
 
 func (b *blockStorageCollector) collect() error {
-	region := gophercloud.EndpointOpts{Region: "RegionOne"}
+	region := gophercloud.EndpointOpts{Region: b.region}
 	blockStorageClient, err := openstack.NewBlockStorageV3(&b.provider, region)
 	if err != nil {
 		return err

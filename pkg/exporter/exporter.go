@@ -21,12 +21,12 @@ var _ prometheus.Collector = &OpenStackExporter{}
 
 // NewOpenStackExporter creates an instance to OpenStackExporter and returns a
 // reference to it.
-func NewOpenStackExporter(provider *gophercloud.ProviderClient) *OpenStackExporter {
+func NewOpenStackExporter(provider *gophercloud.ProviderClient, region string) *OpenStackExporter {
 	return &OpenStackExporter{
 		collectors: []prometheus.Collector{
-			collector.NewComputeCollector(*provider),
-			collector.NewBlockStorageCollector(*provider),
-			collector.NewNetworkCollector(*provider),
+			collector.NewComputeCollector(*provider, region),
+			collector.NewBlockStorageCollector(*provider, region),
+			collector.NewNetworkCollector(*provider, region),
 		},
 	}
 }

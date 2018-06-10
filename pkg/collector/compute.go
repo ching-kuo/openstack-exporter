@@ -15,6 +15,8 @@ import (
 type computeCollector struct {
 	provider gophercloud.ProviderClient
 
+	region string
+
 	TotalRunningVMs prometheus.Gauge
 
 	TotalMemoryMBUsed prometheus.Gauge
@@ -23,24 +25,22 @@ type computeCollector struct {
 }
 
 // NewComputeCollector creates an instance of computeCollector.
-func NewComputeCollector(provider gophercloud.ProviderClient) *computeCollector {
+func NewComputeCollector(provider gophercloud.ProviderClient, region string) *computeCollector {
 	return &computeCollector{
 		provider: provider,
-
+		region:   region,
 		TotalRunningVMs: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_running_vms",
 				Help: "Number of total vms running",
 			},
 		),
-
 		TotalMemoryMBUsed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_memory_mb_used",
 				Help: "Number of total memory used in MB",
 			},
 		),
-
 		TotalVCPUsUsed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_vcpus_used",
@@ -59,7 +59,7 @@ func (c *computeCollector) collectorList() []prometheus.Collector {
 }
 
 func (c *computeCollector) collect() error {
-	region := gophercloud.EndpointOpts{Region: "RegionOne"}
+	region := gophercloud.EndpointOpts{Region: c.region}
 	computeClient, err := openstack.NewComputeV2(&c.provider, region)
 	if err != nil {
 		return err

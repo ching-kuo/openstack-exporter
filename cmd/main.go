@@ -33,8 +33,8 @@ func init() {
 	pflag.StringVar(&configPath, "config", "", "Load the OpenStack config from path.")
 	pflag.StringVar(&endpoint, "keystone-url", os.Getenv("OS_AUTH_URL"), "URL for the OpenStack Keystone API.")
 	pflag.StringVar(&domain, "domain-name", os.Getenv("OS_DOMAIN_NAME"), "Domain name for the OpenStack Keystone.")
-	pflag.StringVar(&password, "password", os.Getenv("OS_PASSWORD"), "Password for the OpenStack Keystone.")
 	pflag.StringVar(&user, "username", os.Getenv("OS_USERNAME"), "User for the OpenStack Keystone.")
+	pflag.StringVar(&password, "password", os.Getenv("OS_PASSWORD"), "Password for the OpenStack Keystone.")
 	pflag.StringVar(&project, "project-name", os.Getenv("OS_PROJECT_NAME"), "Project Name for the OpenStack Keystone.")
 	pflag.StringVar(&region, "region-name", os.Getenv("OS_REGION_NAME"), "Region Name for the OpenStack Keystone.")
 	pflag.Parse()
@@ -55,8 +55,7 @@ func loadOpenStackConfig(path string) {
 	viper.SetConfigFile(path)
 	err := viper.ReadInConfig()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error config file: %s \n", err)
-		os.Exit(1)
+		log.Fatalf("Fatal error config file: %s \n", err)
 	}
 	endpoint = viper.GetString("global.endpoint")
 	user = viper.GetString("global.username")
@@ -85,7 +84,7 @@ func main() {
 		log.Fatalf("Fatal error autenticating: %s \n", err)
 	}
 
-	exporter := exporter.NewOpenStackExporter(provider)
+	exporter := exporter.NewOpenStackExporter(provider, region)
 	prometheus.MustRegister(exporter)
 	if err != nil {
 		log.Fatalf("Cannot export cluster")

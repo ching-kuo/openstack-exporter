@@ -2,7 +2,7 @@
 Simple Prometheus exporter for OpenStack.
 
 ## Build
-First clone the repo, and excute `Makefile` using make tool:
+First clone the repo, and should be execute `Makefile` using make tool:
 ```sh
 $ git clone https://github.com/iGene/openstack-exporter.git $GOPATH/src/github.com/iGene/openstack-exporter
 $ cd $GOPATH/src/github.com/iGene/openstack-exporter
@@ -15,18 +15,40 @@ $ make build_image
 ```
 
 ## Deployment
-Copy the sample configuraion file and fill in:
+Should change this part into 3 sections to selecting each section describing how to configure it using the below methods.
 
-- OpenStack Username
-- OpenStack Password
-- OpenStack Keystone Endpoint
+1. Configuration File:
 
-Launch the exporter using Docker:
 ```sh
+$ cp openstack.toml.example openstack.toml
 $ docker run -d -p 9183:9183  \
       -v $(pwd)/openstack.toml:/etc/openstack-exporter/openstack.toml \
       --name openstack-exporter \
-      openstack-exporter:v0.1.0
+      igene/openstack-exporter:v0.1.0 --config /etc/openstack-exporter/openstack.toml
+```
+
+2. Command line option:
+
+```sh
+$ docker run -d -p 9183:9183  \
+      --name openstack-exporter \
+      igene/openstack-exporter:v0.1.0 \
+      --keystone-url=http://172.22.132.21/identity/v3 \
+      --project-name=admin \
+      --username=admin \
+      --password=secret \
+      --domain-name=default \
+      --region-name=RegionOne
+```
+
+3. Environment variables:
+
+```sh
+$ cp -rp openrc.example openrc
+$ docker run -d -p 9183:9183  \
+      --env-file=openrc \
+      --name openstack-exporter \
+      igene/openstack-exporter:v0.1.0
 ```
 
 Check if its working by:
