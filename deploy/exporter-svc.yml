@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: openstack-exporter
+  labels:
+    app: openstack-exporter
+    k8s-app: openstack-exporter
+  namespace: monitoring
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: 9183
+    protocol: TCP
+  selector:
+    app: openstack-exporter

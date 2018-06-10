@@ -1,28 +1,57 @@
 # OpenStack-Exporter
+Simple Prometheus exporter for OpenStack.
 
-Simple Prometheus exporter for OpenStack
+## Build
+First clone the repo, and execute `Makefile` using make tool:
+```sh
+$ git clone https://github.com/iGene/openstack-exporter.git $GOPATH/src/github.com/iGene/openstack-exporter
+$ cd $GOPATH/src/github.com/iGene/openstack-exporter
+$ make
+```
+
+A Dockerfile is provided in this repo, to build a OpenStack Exporter Docker image, simply run:
+```sh
+$ make build_image
+```
 
 ## Deployment
+Configuring OpenStack exporter can be done in 3 ways, choose the one that is suitable for your environment:
 
-First clone the repo
+1. Configuration File:
 
-```git clone https://github.com/iGene/openstack-exporter.git```
+```sh
+$ cp openstack.toml.example openstack.toml
+$ docker run -d -p 9183:9183  \
+      -v $(pwd)/openstack.toml:/etc/openstack-exporter/openstack.toml \
+      --name openstack-exporter \
+      igene/openstack-exporter:v0.1.0 --config /etc/openstack-exporter/openstack.toml
+```
 
-A Dockerfile is provided in this repo, to build a OpenStack Exporter Docker image, simply run
+2. Command line option:
 
-```docker build -t openstack-exporter openstack-exporter/```
+```sh
+$ docker run -d -p 9183:9183  \
+      --name openstack-exporter \
+      igene/openstack-exporter:v0.1.0 \
+      --keystone-url=http://172.22.132.21/identity/v3 \
+      --project-name=admin \
+      --username=admin \
+      --password=secret \
+      --domain-name=default \
+      --region-name=RegionOne
+```
 
-Copy the sample configuraion file and fill in
+3. Environment variables:
 
-- OpenStack Username
-- OpenStack Password
-- OpenStack Keystone Endpoint
-- OpenStack Project Name
+```sh
+$ cp -rp openrc.example openrc
+$ docker run -d -p 9183:9183  \
+      --env-file=openrc \
+      --name openstack-exporter \
+      igene/openstack-exporter:v0.1.0
+```
 
-Launch the exporter using Docker
-
-```docker run --name openstack-exporter -v $(pwd)/openstack.toml:/etc/openstack-exporter/openstack.toml -d -p 9183:9183 openstack-exporter```
-
-Check if its working by
-
-```curl localhost:9183/metrics```
+Check if its working by:
+```sh
+$ curl localhost:9183/metrics
+```

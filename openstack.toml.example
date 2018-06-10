@@ -1,5 +1,7 @@
 [global]
-username = "OPENSTACK_USERNAME"
-password = "OPENSTACK_PASSWORD"
-endpoint = "OPENSTACK_ENDPOINT"
-project_name = "OPENSTACK_PROJECT_NAME"
+endpoint = "OS_AUTH_URL"
+project = "OS_PROJECT_NAME"
+username = "OS_USERNAME"
+password = "OS_PASSWORD"
+domain = "OS_DOMAIN_NAME"
+region = "OS_REGION_NAME"

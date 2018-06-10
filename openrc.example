@@ -1,0 +1,8 @@
+OS_AUTH_URL=http://openstack.com/identity/v3
+OS_PROJECT_NAME=admin
+OS_TENANT_NAME=admin
+OS_USERNAME=admin
+OS_PASSWORD=secret
+OS_REGION_NAME=RegionOne
+OS_DOMAIN_NAME=default
+OS_IDENTITY_API_VERSION=3

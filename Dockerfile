@@ -1,19 +1,21 @@
-FROM golang:1.10.2-alpine3.7 AS build-env
+FROM golang:1.10-alpine AS build-env
+LABEL maintainer="Gene Kuo<igene@igene.tw>"
 
-WORKDIR /go/src/openstack-exporter
+ENV GOPATH /go
+WORKDIR $GOPATH/src/github.com/iGene/openstack-exporter
+
+RUN apk add --no-cache git make g++ && \
+  go get -u github.com/golang/dep/cmd/dep
+
 COPY . .
+RUN make && \
+  mv openstack-exporter /tmp/openstack-exporter
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache git
-
-RUN go get -d -v ./...
-RUN go build -o openstack-exporter -v .
-
+# Run stage
 FROM alpine
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates && \
+  rm -rf /var/cache/apk/*
+COPY --from=build-env /tmp/openstack-exporter /bin/openstack-exporter
 
-COPY --from=build-env /go/src/openstack-exporter/openstack-exporter /usr/bin/
-
-CMD ["openstack-exporter"]
+ENTRYPOINT ["openstack-exporter"]

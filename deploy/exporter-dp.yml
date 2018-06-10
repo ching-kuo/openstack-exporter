@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openstack-exporter
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openstack-exporter
+  template:
+    metadata:
+      labels:
+        app: openstack-exporter
+    spec:
+      hostNetwork: true
+      hostPID: true
+      containers:
+      - name: openstack-exporter
+        image: iGene/openstack-exporter:v0.1.0
+        ports:
+        - containerPort: 9183
+          hostPort: 9183
+        resources:
+          requests:
+            memory: 30Mi
+            cpu: 100m
+          limits:
+            memory: 50Mi
+            cpu: 200m
