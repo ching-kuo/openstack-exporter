@@ -2,7 +2,7 @@
 Simple Prometheus exporter for OpenStack.
 
 ## Build
-First clone the repo, and should be execute `Makefile` using make tool:
+First clone the repo, and execute `Makefile` using make tool:
 ```sh
 $ git clone https://github.com/iGene/openstack-exporter.git $GOPATH/src/github.com/iGene/openstack-exporter
 $ cd $GOPATH/src/github.com/iGene/openstack-exporter
@@ -15,7 +15,7 @@ $ make build_image
 ```
 
 ## Deployment
-Should change this part into 3 sections to selecting each section describing how to configure it using the below methods.
+Configuring OpenStack exporter can be done in 3 ways, choose the one that is suitable for your environment:
 
 1. Configuration File:
 
