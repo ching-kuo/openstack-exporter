@@ -12,7 +12,7 @@ import (
 
 // networkCollector collects statistic about Neturon in an OpenStack Clusetr.
 type networkCollector struct {
-	provider gophercloud.ProviderClient
+	provider *gophercloud.ProviderClient
 
 	region string
 
@@ -43,7 +43,6 @@ func GetNetworkNumber(networkClient *gophercloud.ServiceClient) (int, error) {
 func GetIPsNumber(networkClient *gophercloud.ServiceClient) (int, error) {
 
 	opts := floatingips.ListOpts{}
-
 	allPages, err := floatingips.List(networkClient, opts).AllPages()
 	if err != nil {
 		return 0, err
@@ -58,20 +57,20 @@ func GetIPsNumber(networkClient *gophercloud.ServiceClient) (int, error) {
 }
 
 // NewNetworkCollector create an instance of networkCollector.
-func NewNetworkCollector(provider gophercloud.ProviderClient, region string) *networkCollector {
+func NewNetworkCollector(provider *gophercloud.ProviderClient, region string) *networkCollector {
 	return &networkCollector{
 		provider: provider,
 		region:   region,
 		TotalFloatingIPsUsed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_floating_ips_used",
-				Help: "Total number of floating IPs used",
+				Help: "Total number of floating IPs used.",
 			},
 		),
 		TotalNetworkNumber: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_network_number",
-				Help: "Number of total networks",
+				Help: "Number of total networks.",
 			},
 		),
 	}
@@ -86,16 +85,20 @@ func (n *networkCollector) collectorList() []prometheus.Collector {
 
 func (n *networkCollector) collect() error {
 	region := gophercloud.EndpointOpts{Region: n.region}
-	networkClient, err := openstack.NewNetworkV2(&n.provider, region)
+	networkClient, err := openstack.NewNetworkV2(n.provider, region)
 	if err != nil {
 		return err
 	}
 
-	var netNumber int
-	var ipsNumber int
+	netNumber, err := GetNetworkNumber(networkClient)
+	if err != nil {
+		return err
+	}
 
-	netNumber, err = GetNetworkNumber(networkClient)
-	ipsNumber, err = GetIPsNumber(networkClient)
+	ipsNumber, err := GetIPsNumber(networkClient)
+	if err != nil {
+		return err
+	}
 
 	n.TotalFloatingIPsUsed.Set(float64(ipsNumber))
 	n.TotalNetworkNumber.Set(float64(netNumber))
