@@ -11,9 +11,8 @@ import (
 
 // computeCollector collects statistics about hypervisor and Nova in an OpenStack
 // cluster.
-
 type computeCollector struct {
-	provider gophercloud.ProviderClient
+	provider *gophercloud.ProviderClient
 
 	region string
 
@@ -25,26 +24,26 @@ type computeCollector struct {
 }
 
 // NewComputeCollector creates an instance of computeCollector.
-func NewComputeCollector(provider gophercloud.ProviderClient, region string) *computeCollector {
+func NewComputeCollector(provider *gophercloud.ProviderClient, region string) *computeCollector {
 	return &computeCollector{
 		provider: provider,
 		region:   region,
 		TotalRunningVMs: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_running_vms",
-				Help: "Number of total vms running",
+				Help: "Number of total vms running.",
 			},
 		),
 		TotalMemoryMBUsed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_memory_mb_used",
-				Help: "Number of total memory used in MB",
+				Help: "Number of total memory used in MB.",
 			},
 		),
 		TotalVCPUsUsed: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_vcpus_used",
-				Help: "Number of total VCPU used",
+				Help: "Number of total VCPU used.",
 			},
 		),
 	}
@@ -60,7 +59,7 @@ func (c *computeCollector) collectorList() []prometheus.Collector {
 
 func (c *computeCollector) collect() error {
 	region := gophercloud.EndpointOpts{Region: c.region}
-	computeClient, err := openstack.NewComputeV2(&c.provider, region)
+	computeClient, err := openstack.NewComputeV2(c.provider, region)
 	if err != nil {
 		return err
 	}

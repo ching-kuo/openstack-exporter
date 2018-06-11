@@ -11,7 +11,7 @@ import (
 
 // blockStorageCollector collects statistics about Cinder in an OpenStack Cluster.
 type blockStorageCollector struct {
-	provider gophercloud.ProviderClient
+	provider *gophercloud.ProviderClient
 
 	region string
 
@@ -21,20 +21,20 @@ type blockStorageCollector struct {
 }
 
 // NewBlockStorageCollector creates an instance of blockStorageCollector.
-func NewBlockStorageCollector(provider gophercloud.ProviderClient, region string) *blockStorageCollector {
+func NewBlockStorageCollector(provider *gophercloud.ProviderClient, region string) *blockStorageCollector {
 	return &blockStorageCollector{
 		provider: provider,
 		region:   region,
 		TotalVolumeSize: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_volume_size",
-				Help: "Number of total size of volumes in GB",
+				Help: "Number of total size of volumes in GB.",
 			},
 		),
 		TotalVolumeNumber: prometheus.NewGauge(
 			prometheus.GaugeOpts{
 				Name: "openstack_total_volume_number",
-				Help: "Number of total volume",
+				Help: "Number of total volume.",
 			},
 		),
 	}
@@ -49,7 +49,7 @@ func (b *blockStorageCollector) collectorList() []prometheus.Collector {
 
 func (b *blockStorageCollector) collect() error {
 	region := gophercloud.EndpointOpts{Region: b.region}
-	blockStorageClient, err := openstack.NewBlockStorageV3(&b.provider, region)
+	blockStorageClient, err := openstack.NewBlockStorageV3(b.provider, region)
 	if err != nil {
 		return err
 	}

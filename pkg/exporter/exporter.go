@@ -16,7 +16,6 @@ type OpenStackExporter struct {
 }
 
 // verify that the exporter implementation is correct
-
 var _ prometheus.Collector = &OpenStackExporter{}
 
 // NewOpenStackExporter creates an instance to OpenStackExporter and returns a
@@ -24,9 +23,9 @@ var _ prometheus.Collector = &OpenStackExporter{}
 func NewOpenStackExporter(provider *gophercloud.ProviderClient, region string) *OpenStackExporter {
 	return &OpenStackExporter{
 		collectors: []prometheus.Collector{
-			collector.NewComputeCollector(*provider, region),
-			collector.NewBlockStorageCollector(*provider, region),
-			collector.NewNetworkCollector(*provider, region),
+			collector.NewComputeCollector(provider, region),
+			collector.NewBlockStorageCollector(provider, region),
+			collector.NewNetworkCollector(provider, region),
 		},
 	}
 }
