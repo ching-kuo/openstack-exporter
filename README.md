@@ -14,6 +14,11 @@ A Dockerfile is provided in this repo, to build a OpenStack Exporter Docker imag
 $ make build_image
 ```
 
+Or to use a pre-built image, pull it from Docker Hub
+```sh
+$ docker pull igenetw/openstack-exporter
+```
+
 ## Deployment
 Configuring OpenStack exporter can be done in 3 ways, choose the one that is suitable for your environment:
 
