@@ -6,7 +6,7 @@ VERSION ?= v$(VERSION_MAJOR).$(VERSION_MINOR).$(VERSION_BUILD)
 GOOS ?= $(shell go env GOOS)
 
 ORG := github.com
-OWNER := igene
+OWNER := igenetw
 REPOPATH ?= $(ORG)/$(OWNER)/openstack-exporter
 
 .PHONY: build

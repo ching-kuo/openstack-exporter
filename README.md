@@ -29,7 +29,7 @@ $ cp openstack.toml.example openstack.toml
 $ docker run -d -p 9183:9183  \
       -v $(pwd)/openstack.toml:/etc/openstack-exporter/openstack.toml \
       --name openstack-exporter \
-      igene/openstack-exporter:v0.1.0 --config /etc/openstack-exporter/openstack.toml
+      igenetw/openstack-exporter:v0.1.0 --config /etc/openstack-exporter/openstack.toml
 ```
 
 2. Command line option:
@@ -37,7 +37,7 @@ $ docker run -d -p 9183:9183  \
 ```sh
 $ docker run -d -p 9183:9183  \
       --name openstack-exporter \
-      igene/openstack-exporter:v0.1.0 \
+      igenetw/openstack-exporter:v0.1.0 \
       --keystone-url=http://172.22.132.21/identity/v3 \
       --project-name=admin \
       --username=admin \
@@ -53,7 +53,7 @@ $ cp -rp openrc.example openrc
 $ docker run -d -p 9183:9183  \
       --env-file=openrc \
       --name openstack-exporter \
-      igene/openstack-exporter:v0.1.0
+      igenetw/openstack-exporter:v0.1.0
 ```
 
 Check if its working by:
