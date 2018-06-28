@@ -30,13 +30,13 @@ var (
 func init() {
 	pflag.StringVar(&listenAddr, "listen", ":9183", "<address>:<port> to listen on.")
 	pflag.StringVar(&metricsPath, "telemetry-path", "/metrics", "Path under which to expose metrics.")
-	pflag.StringVar(&configPath, "config", "", "Load the OpenStack config from path.")
-	pflag.StringVar(&endpoint, "keystone-url", os.Getenv("OS_AUTH_URL"), "URL for the OpenStack Keystone API.")
-	pflag.StringVar(&domain, "domain-name", os.Getenv("OS_DOMAIN_NAME"), "Domain name for the OpenStack Keystone.")
-	pflag.StringVar(&user, "username", os.Getenv("OS_USERNAME"), "User for the OpenStack Keystone.")
-	pflag.StringVar(&password, "password", os.Getenv("OS_PASSWORD"), "Password for the OpenStack Keystone.")
-	pflag.StringVar(&project, "project-name", os.Getenv("OS_PROJECT_NAME"), "Project Name for the OpenStack Keystone.")
-	pflag.StringVar(&region, "region-name", os.Getenv("OS_REGION_NAME"), "Region Name for the OpenStack Keystone.")
+	pflag.StringVar(&configPath, "config", "", "Load OpenStack config from path.")
+	pflag.StringVar(&endpoint, "keystone-url", os.Getenv("OS_AUTH_URL"), "URL for OpenStack Keystone API.")
+	pflag.StringVar(&domain, "domain-name", os.Getenv("OS_DOMAIN_NAME"), "Domain name for OpenStack Keystone.")
+	pflag.StringVar(&user, "username", os.Getenv("OS_USERNAME"), "User for OpenStack Keystone.")
+	pflag.StringVar(&password, "password", os.Getenv("OS_PASSWORD"), "Password for OpenStack Keystone.")
+	pflag.StringVar(&project, "project-name", os.Getenv("OS_PROJECT_NAME"), "Project Name for OpenStack Keystone.")
+	pflag.StringVar(&region, "region-name", os.Getenv("OS_REGION_NAME"), "Region Name for OpenStack Keystone.")
 	pflag.Parse()
 }
 
