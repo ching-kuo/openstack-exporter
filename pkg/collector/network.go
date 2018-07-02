@@ -6,6 +6,7 @@ import (
 	"github.com/gophercloud/gophercloud"
 	"github.com/gophercloud/gophercloud/openstack"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/layer3/floatingips"
+    "github.com/gophercloud/gophercloud/openstack/networking/v2/extensions/layer3/routers"
 	"github.com/gophercloud/gophercloud/openstack/networking/v2/networks"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -19,6 +20,8 @@ type networkCollector struct {
 	TotalFloatingIPsUsed prometheus.Gauge
 
 	TotalNetworkNumber prometheus.Gauge
+
+    TotalRouterNumber prometheus.Gauge
 }
 
 // GetNetworkNumber return the number of all network provisioned.
@@ -56,6 +59,22 @@ func GetIPsNumber(networkClient *gophercloud.ServiceClient) (int, error) {
 	return len(allFIPs), nil
 }
 
+func GetRouterNumber(networkClient *gophercloud.ServiceClient) (int, error) {
+
+    opts := routers.ListOpts{}
+    allPages, err := routers.List(networkClient, opts).AllPages()
+    if err != nil {
+    	return 0, err
+    }
+
+    allRouters, err := routers.ExtractRouters(allPages)
+    if err != nil {
+    	return 0, err
+    }
+
+    return len(allRouters), nil
+}
+
 // NewNetworkCollector create an instance of networkCollector.
 func NewNetworkCollector(provider *gophercloud.ProviderClient, region string) *networkCollector {
 	return &networkCollector{
@@ -73,6 +92,12 @@ func NewNetworkCollector(provider *gophercloud.ProviderClient, region string) *n
 				Help: "Number of total networks.",
 			},
 		),
+        TotalRouterNumber: prometheus.NewGauge(
+            prometheus.GaugeOpts{
+                Name: "openstack_total_router_number",
+                Help: "Number of total routers",
+            },
+        ),
 	}
 }
 
@@ -80,6 +105,7 @@ func (n *networkCollector) collectorList() []prometheus.Collector {
 	return []prometheus.Collector{
 		n.TotalNetworkNumber,
 		n.TotalFloatingIPsUsed,
+        n.TotalRouterNumber,
 	}
 }
 
@@ -100,8 +126,14 @@ func (n *networkCollector) collect() error {
 		return err
 	}
 
+    routerNumber, err := GetRouterNumber(networkClient)
+    if err != nil {
+        return err
+    }
+
 	n.TotalFloatingIPsUsed.Set(float64(ipsNumber))
 	n.TotalNetworkNumber.Set(float64(netNumber))
+    n.TotalRouterNumber.Set(float64(routerNumber))
 
 	return nil
 }
