@@ -26,7 +26,7 @@ func NewOpenStackExporter(provider *gophercloud.ProviderClient, region string) *
 			collector.NewComputeCollector(provider, region),
 			collector.NewBlockStorageCollector(provider, region),
 			collector.NewNetworkCollector(provider, region),
-            collector.NewClusterHealthCollector(provider, region),
+			collector.NewClusterHealthCollector(provider, region),
 		},
 	}
 }
